@@ -1,10 +1,23 @@
 version: '3'
 
+networks:
+  main:
+
+volumes:
+  etc-fusionpbx:
+  etc-freeswitch:
+  var-lib-freeswitch:
+  usr-share-freeswitch:
+
 services:
   fusionpbx:
     build: .
     volumes:
       - ./fusionpbx:/var/www/fusionpbx
+      - etc-fusionpbx:/etc/fusionpbx
+      - etc-freeswitch:/etc/freeswitch
+      - var-lib-freeswitch:/var/lib/freeswitch
+      - usr-share-freeswitch:/usr/share/freeswitch
     ports:
       - "5060:5060/udp"
       - "80:80"
@@ -25,5 +38,3 @@ services:
         main:
           aliases:
             - db
-networks:
-  main:

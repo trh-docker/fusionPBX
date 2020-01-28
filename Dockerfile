@@ -27,6 +27,7 @@ RUN apt-get update \
         net-tools \
         gnupg2 \
         netcat \
+        haproxy \
     && PHP_VERSION=$(php --version | head -1 | awk '{print $2}' | cut -d. -f 1-2) \
      && wget https://raw.githubusercontent.com/samael33/fusionpbx-install.sh/master/debian/resources/nginx/fusionpbx -O /etc/nginx/sites-available/fusionpbx \
     && find /etc/nginx/sites-available/fusionpbx -type f -exec sed -i 's/\/var\/run\/php\/php7.1-fpm.sock/\/run\/php\/php'"$PHP_VERSION"'-fpm.sock/g' {} \; \
@@ -106,6 +107,11 @@ RUN apt-get update \
     && chmod -R ug+rw /var/log/freeswitch \
     && find /var/log/freeswitch -type d -exec chmod 2770 {} \; \
     && find /etc/freeswitch/autoload_configs/event_socket.conf.xml -type f -exec sed -i 's/::/127.0.0.1/g' {} \; \
+    && mkdir -p /run/haproxy \
+    && echo 'listen pgsql \n\
+    bind 127.0.0.1:5432\n\
+    mode tcp\n\
+    server master db:5432' >> /etc/haproxy/haproxy.cfg \
     && mkdir -p /run/php/ \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
