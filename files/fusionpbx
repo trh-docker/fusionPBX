@@ -48,12 +48,6 @@ server {
 		alias /var/www/dehydrated;
 	}
 
-	#rewrite rule - send to https with an exception for provisioning
-	if ($uri !~* ^.*(provision|xml_cdr).*$) {
-		rewrite ^(.*) https://$host$1 permanent;
-		break;
-	}
-
 	#REST api
 	if ($uri ~* ^.*/api/.*$) {
 		rewrite ^(.*)/api/(.*)$ $1/api/index.php?rewrite_uri=$2 last;

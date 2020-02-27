@@ -1,3 +1,3 @@
 git add -A
-git commit -m "changed for better control behind caddy"
+git commit -m "removed rewrite"
 git push
