@@ -30,7 +30,7 @@ services:
           aliases:
             - db
 volumes:
-  fusioinpbx:
+  fusionpbx:
   etc-fusionpbx:
   etc-freeswitch:
   var-lib-freeswitch:

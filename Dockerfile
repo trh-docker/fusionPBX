@@ -1,3 +1,7 @@
+FROM quay.io/spivegin/gitonly:latest as git
+WORKDIR /opt/
+RUN git clone https://github.com/fusionpbx/fusionpbx.git
+
 FROM debian:buster
 
 # Install Required Dependencies
@@ -28,7 +32,7 @@ RUN apt-get update \
         netcat \
         haproxy \
     && PHP_VERSION=$(php --version | head -1 | awk '{print $2}' | cut -d. -f 1-2) \
-     && wget https://raw.githubusercontent.com/samael33/fusionpbx-install.sh/master/debian/resources/nginx/fusionpbx -O /etc/nginx/sites-available/fusionpbx \
+    && wget https://raw.githubusercontent.com/samael33/fusionpbx-install.sh/master/debian/resources/nginx/fusionpbx -O /etc/nginx/sites-available/fusionpbx \
     && find /etc/nginx/sites-available/fusionpbx -type f -exec sed -i 's/\/var\/run\/php\/php7.1-fpm.sock/\/run\/php\/php'"$PHP_VERSION"'-fpm.sock/g' {} \; \
     && ln -s /etc/nginx/sites-available/fusionpbx /etc/nginx/sites-enabled/fusionpbx \
     && ln -s /etc/ssl/private/ssl-cert-snakeoil.key /etc/ssl/private/nginx.key \
@@ -116,6 +120,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ADD ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=git /opt/fusionpbx /var/www/fusionpbx
 RUN PHP_VERSION=$(php --version | head -1 | awk '{print $2}' | cut -d. -f 1-2) \
     && find /etc/supervisor/conf.d/supervisord.conf -type f -exec sed -i 's/php-fpm7.3/php-fpm'"$PHP_VERSION"'/g' {} \; \
     && find /etc/supervisor/conf.d/supervisord.conf -type f -exec sed -i 's/\/php\/7.3\//\/php\/'"$PHP_VERSION"'\//g' {} \;
