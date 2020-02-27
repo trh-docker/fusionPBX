@@ -1,19 +1,10 @@
 version: '3.7'
 
-networks:
-  main:
-
-volumes:
-  etc-fusionpbx:
-  etc-freeswitch:
-  var-lib-freeswitch:
-  usr-share-freeswitch:
-
 services:
   fusionpbx:
-    build: .
+    image: quay.io/spivegin/fusionpbx:latest
     volumes:
-      - ./fusionpbx:/var/www/fusionpbx
+      - fusionpbx:/var/www/fusionpbx
       - etc-fusionpbx:/etc/fusionpbx
       - etc-freeswitch:/etc/freeswitch
       - var-lib-freeswitch:/var/lib/freeswitch
@@ -23,7 +14,7 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      main:
+      fusion_main:
         aliases: 
           - fusion
     depends_on:
@@ -35,6 +26,15 @@ services:
         POSTGRES_USER: 'fusionpbx'
         POSTGRES_PASSWORD: '4321'
       networks:
-        main:
+        fusion_main:
           aliases:
             - db
+volumes:
+  fusioinpbx:
+  etc-fusionpbx:
+  etc-freeswitch:
+  var-lib-freeswitch:
+  usr-share-freeswitch:
+networks:
+  fusion_main:
+
