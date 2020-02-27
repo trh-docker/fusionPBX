@@ -4,7 +4,7 @@ services:
   fusionpbx:
     image: quay.io/spivegin/fusionpbx:latest
     volumes:
-      - fusionpbx:/var/www/fusionpbx
+      # - fusionpbx:/var/www/fusionpbx
       - etc-fusionpbx:/etc/fusionpbx
       - etc-freeswitch:/etc/freeswitch
       - var-lib-freeswitch:/var/lib/freeswitch
