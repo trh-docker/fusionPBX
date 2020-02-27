@@ -1,3 +1,3 @@
 git add -A
-git commit -m "removed not used folder"
+git commit -m "replaced buster with stretch"
 git push

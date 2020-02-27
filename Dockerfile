@@ -1,5 +1,4 @@
-FROM debian:buster
-LABEL mainteiner = Igor Olhovskiy <IgorOlhovskiy@gmail.com>
+FROM debian:stretch
 
 # Install Required Dependencies
 RUN apt-get update \
