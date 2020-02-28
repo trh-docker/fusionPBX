@@ -4,32 +4,34 @@ services:
   fusionpbx:
     image: quay.io/spivegin/fusionpbx:latest
     volumes:
-      # - fusionpbx:/var/www/fusionpbx
       - etc-fusionpbx:/etc/fusionpbx
       - etc-freeswitch:/etc/freeswitch
       - var-lib-freeswitch:/var/lib/freeswitch
       - usr-share-freeswitch:/usr/share/freeswitch
     ports:
       - "5060:5060/udp"
-      - "80:80"
-      - "443:443"
+      - "5081:5081/udp"
     networks:
-      fusion_frontend:
+      rafflenet:
       fusion_main:
-        # aliases: 
-        #   - fusion
     depends_on:
       - db
+    deploy:
+      placement:
+        constraints:
+          - node.labels.fusion == true
   db:
       image: postgres:10-alpine
       environment:
         POSTGRES_DB: 'fusionpbx'
         POSTGRES_USER: 'fusionpbx'
-        POSTGRES_PASSWORD: '4321'
+        POSTGRES_PASSWORD: 'mODR8lu0lpDpAt5ukD5a'
       networks:
         fusion_main:
-          # aliases:
-          #   - db
+      deploy:
+        placement:
+          constraints:
+            - node.labels.database == true          
 volumes:
   fusionpbx:
   etc-fusionpbx:
@@ -38,4 +40,5 @@ volumes:
   usr-share-freeswitch:
 networks:
   fusion_main:
-  fusion_frontend:
+  rafflenet:
+    external: true 
