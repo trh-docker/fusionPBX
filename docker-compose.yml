@@ -14,9 +14,10 @@ services:
       - "80:80"
       - "443:443"
     networks:
+      fusion_frontend:
       fusion_main:
-        aliases: 
-          - fusion
+        # aliases: 
+        #   - fusion
     depends_on:
       - db
   db:
@@ -27,8 +28,8 @@ services:
         POSTGRES_PASSWORD: '4321'
       networks:
         fusion_main:
-          aliases:
-            - db
+          # aliases:
+          #   - db
 volumes:
   fusionpbx:
   etc-fusionpbx:
@@ -37,4 +38,5 @@ volumes:
   usr-share-freeswitch:
 networks:
   fusion_main:
+  fusion_frontend:
 
